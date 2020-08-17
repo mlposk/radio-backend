@@ -1,27 +1,25 @@
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
 const path = require('path');
-const fs = require('fs');
-const root = '/Users/ksoplm/Documents/ksoplm/testdir';
+const router  = express.Router();
+const mongo = require('mongodb').MongoClient;
+const config = require('../config/config');
+
 
 function normalize(dirPath) {
-    let normalizedPath = path.normalize(dirPath);
-    return normalizedPath.includes(root) ? normalizedPath : root;
+    const normalizedPath = path.normalize(dirPath);
+    return normalizedPath.includes(config.uploadPath) ? normalizedPath : config.uploadPath;
 }
 
-router.post('/', (req, res) => {
-    const dirPath = req.body.path;
-    const normalizedPath = !dirPath ? root : normalize(root + '/' + dirPath);
-    fs.readdir(normalizedPath, (err, items) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                console.error('No such directory: ' + dirPath);
-                return;
-            }
-        }
-        res.json(items);
-    })
+router.get('/', (req, res) => {
+    mongo.connect(config.mongoUri, { useUnifiedTopology: true }).then((client) => {
+        const db = client.db('mlposk');
+        const cursor = db.collection('files').find();
+
+        cursor.toArray((err, item) => {
+            if (err) throw err;
+            res.render('files', { title: 'File list', items: item});
+        })
+    });
 })
 
 module.exports = router;
