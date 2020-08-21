@@ -1,7 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
-const sassMiddleware = require('node-sass-middleware');
 
 const indexRouter = require('./routes/index');
 const fileUploadRouter = require('./routes/upload');
