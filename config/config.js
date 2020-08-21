@@ -1,22 +1,32 @@
 const config = {};
 
-mongo = {
+const mongo = {
     schema: 'mongodb+srv',
     user: 'db_user',
     password: '6birlGtmqPtVIgrP',
     host: 'cluster0.7znfd.gcp.mongodb.net',
-    databaseName: 'mlposk',
-    options: '?retryWrites=true&w=majority'
+    databaseName: 'mlposk'
 }
 
-config.mongoUri =
-    mongo.schema + '://' +
-    mongo.user + ':' +
-    mongo.password + '@' +
-    mongo.host + '/' +
-    mongo.databaseName +
-    mongo.options
+config.mongo = {
+    uri:
+        mongo.schema + '://' +
+        mongo.user + ':' +
+        mongo.password + '@' +
+        mongo.host + '/' +
+        mongo.databaseName,
+    options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
+    }
+};
 
-config.uploadPath = '/Users/ksoplm/Code/ksoplm/radio-backend/uploads/';
+config.upload = {}
+
+config.upload ={
+    dir: 'uploads',
+    root: '/Users/ksoplm/Code/ksoplm/radio-backend/'
+}
 
 module.exports = config;
